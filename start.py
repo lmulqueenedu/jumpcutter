@@ -22,29 +22,41 @@ def deletePath(s): # Dangerous! Watch out!
         print ("Deletion of the directory %s failed" % s)
         print(OSError)
 
+TOTALVIDS = int(input("How many videos are you jumpcutting? "))
+print()
 
-#file should be located in the 'input' folder
-FILENAME1 = input("Enter the filepath of the first file: (Left)")
-FILENAME2 = input("Enter the filepath of the second file: (Right)")
-FILENAMEOUT = input("What would you like the output file to be called? (Eg. Lecture, Jumpcut) ")
-TEMP_FOLDER = "SEGTEMP" + str(int(time()))
+FILENAMEL = dict()
+FILENAMER = dict()
+FILENAMEOUT = dict()
 
-#Create temporary directories
-createPath(TEMP_FOLDER)
-createPath(TEMP_FOLDER+"/parts")
-createPath(TEMP_FOLDER+"/jcparts")
+for i in range(TOTALVIDS):
+    print("File Number: "+str(i+1))
+    FILENAMEL[i] = input("Enter the filepath of the left file: ")
+    FILENAMER[i] = input("Enter the filepath of the right file: ")
+    FILENAMEOUT[i] = input("What would you like the output file to be called? (Eg. Lecture, Jumpcut) ")
+    print()
 
-execute("ffmpeg -i "+FILENAME1+" -i "+FILENAME2+" -filter_complex hstack "+TEMP_FOLDER+"/"+FILENAMEOUT+"_stitched.mp4")
-execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAMEOUT+"_stitched.mp4 -c copy -map 0 -segment_time 00:00:10 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAMEOUT+"_stitched_%03d.mp4")
+for i in range(TOTALVIDS):
+    #Create temporary directories
+    TEMP_FOLDER = "SEGTEMP" + str(int(time()))
+    createPath(TEMP_FOLDER)
+    createPath(TEMP_FOLDER+"/parts")
+    createPath(TEMP_FOLDER+"/jcparts")
 
-for file in os.listdir(TEMP_FOLDER+"/parts"):
-    execute("py jumpcutter.py --input_file "+TEMP_FOLDER+"/parts/"+file+" --output_file "+TEMP_FOLDER+"/jcparts/"+file+" --sounded_speed 1.5 --silent_speed 8 --frame_margin 2")
+    execute("ffmpeg -i "+FILENAMEL[i]+" -i "+FILENAMER[i]+" -filter_complex hstack "+TEMP_FOLDER+"/"+FILENAMEOUT[i]+"_stitched.mp4")
+    execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAMEOUT[i]+"_stitched.mp4 -c copy -map 0 -segment_time 00:00:10 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAMEOUT[i]+"_stitched_%03d.mp4")
 
-with open(TEMP_FOLDER+"/list.txt", "w") as a:
-    for file in os.listdir(TEMP_FOLDER+"/jcparts"):
-        a.write("file '"+"jcparts/"+file+"'\n")
+    for file in os.listdir(TEMP_FOLDER+"/parts"):
+        execute("py jumpcutter.py --input_file "+TEMP_FOLDER+"/parts/"+file+" --output_file "+TEMP_FOLDER+"/jcparts/"+file+" --sounded_speed 1.5 --silent_speed 8 --frame_margin 2")
 
-execute("ffmpeg -f concat -safe 0 -i "+TEMP_FOLDER+"/list.txt -c copy "+FILENAMEOUT+".mp4")
+    with open(TEMP_FOLDER+"/list.txt", "w") as a:
+        for file in os.listdir(TEMP_FOLDER+"/jcparts"):
+            a.write("file '"+"jcparts/"+file+"'\n")
 
-#Delete temporary directory
-deletePath(TEMP_FOLDER)
+    execute("ffmpeg -f concat -safe 0 -i "+TEMP_FOLDER+"/list.txt -c copy "+FILENAMEOUT[i]+".mp4")
+
+    #Delete temporary directory
+    deletePath(TEMP_FOLDER)
+
+print("All done!")
+input("Press ENTER to exit.")

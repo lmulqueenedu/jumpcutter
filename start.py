@@ -24,7 +24,9 @@ def deletePath(s): # Dangerous! Watch out!
 
 
 #file should be located in the 'input' folder
-FILENAME = input("What is the file's name?")
+FILENAME1 = input("Enter the filepath of the first file: ")
+FILENAME2 = input("Enter the filepath of the second file: ")
+FILENAMEOUT = input("What would you like the output file to be called? (Eg. Lecture, Jumpcut) ")
 TEMP_FOLDER = "SEGTEMP" + str(int(time()))
 
 #Create temporary directories
@@ -32,8 +34,8 @@ createPath(TEMP_FOLDER)
 createPath(TEMP_FOLDER+"/parts")
 createPath(TEMP_FOLDER+"/jcparts")
 
-execute("ffmpeg -i input/"+FILENAME+"_s1.mp4 -i input/"+FILENAME+"_s2.mp4 -filter_complex hstack "+TEMP_FOLDER+"/"+FILENAME+"_stitched.mp4")
-execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAME+"_stitched.mp4 -c copy -map 0 -segment_time 00:20:00 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAME+"_stitched_%03d.mp4")
+execute("ffmpeg -i "+FILENAME1+" -i "+FILENAME2+" -filter_complex hstack "+TEMP_FOLDER+"/"+FILENAMEOUT+"_stitched.mp4")
+execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAMEOUT+"_stitched.mp4 -c copy -map 0 -segment_time 00:00:10 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAMEOUT+"_stitched_%03d.mp4")
 
 for file in os.listdir(TEMP_FOLDER+"/parts"):
     execute("py jumpcutter.py --input_file "+TEMP_FOLDER+"/parts/"+file+" --output_file "+TEMP_FOLDER+"/jcparts/"+file+" --sounded_speed 1.5 --silent_speed 8 --frame_margin 2")
@@ -42,7 +44,7 @@ with open(TEMP_FOLDER+"/list.txt", "w") as a:
     for file in os.listdir(TEMP_FOLDER+"/jcparts"):
         a.write("file '"+"jcparts/"+file+"'\n")
 
-execute("ffmpeg -f concat -safe 0 -i "+TEMP_FOLDER+"/list.txt -c copy "+FILENAME+"_jumpcut.mp4")
+execute("ffmpeg -f concat -safe 0 -i "+TEMP_FOLDER+"/list.txt -c copy "+FILENAMEOUT+".mp4")
 
 #Delete temporary directory
 deletePath(TEMP_FOLDER)

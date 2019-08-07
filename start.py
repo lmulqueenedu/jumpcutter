@@ -24,8 +24,8 @@ def deletePath(s): # Dangerous! Watch out!
 
 
 #file should be located in the 'input' folder
-FILENAME1 = input("Enter the filepath of the first file: ")
-FILENAME2 = input("Enter the filepath of the second file: ")
+FILENAME1 = input("Enter the filepath of the first file: (Left)")
+FILENAME2 = input("Enter the filepath of the second file: (Right)")
 FILENAMEOUT = input("What would you like the output file to be called? (Eg. Lecture, Jumpcut) ")
 TEMP_FOLDER = "SEGTEMP" + str(int(time()))
 

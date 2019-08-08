@@ -44,10 +44,10 @@ for i in range(TOTALVIDS):
     createPath(TEMP_FOLDER+"/jcparts")
 
     execute("ffmpeg -i "+FILENAMEL[i]+" -i "+FILENAMER[i]+" -filter_complex hstack "+TEMP_FOLDER+"/"+FILENAMEOUT[i]+"_stitched.mp4")
-    execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAMEOUT[i]+"_stitched.mp4 -c copy -map 0 -segment_time 00:00:10 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAMEOUT[i]+"_stitched_%03d.mp4")
+    execute("ffmpeg -i "+TEMP_FOLDER+"/"+FILENAMEOUT[i]+"_stitched.mp4 -c copy -map 0 -segment_time 00:20:00 -f segment -reset_timestamps 1 "+TEMP_FOLDER+"/parts/"+FILENAMEOUT[i]+"_stitched_%03d.mp4")
 
     for file in os.listdir(TEMP_FOLDER+"/parts"):
-        execute("py jumpcutter.py --input_file "+TEMP_FOLDER+"/parts/"+file+" --output_file "+TEMP_FOLDER+"/jcparts/"+file+" --sounded_speed 1.5 --silent_speed 8 --frame_margin 2")
+        execute("py jumpcutter.py --input_file "+TEMP_FOLDER+"/parts/"+file+" --output_file "+TEMP_FOLDER+"/jcparts/"+file+" --sounded_speed 1.75 --silent_speed 999999 --frame_margin 4")
 
     with open(TEMP_FOLDER+"/list.txt", "w") as a:
         for file in os.listdir(TEMP_FOLDER+"/jcparts"):

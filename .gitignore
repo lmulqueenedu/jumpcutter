@@ -93,3 +93,7 @@ ENV/
 *.iml
 out
 gen
+
+# Temp Stuff
+TEMP*
+JCTEMP*

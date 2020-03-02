@@ -30,11 +30,8 @@ for i in range(TOTALVIDS):
     FILENAME[i] = input("Enter the filepath of the video: ")
     FILENAMEOUT[i] = os.path.splitext(os.path.basename(FILENAME[i]))[0]
 
-#TEMP_FOLDER = "JCTEMP" + str(int(time()))
-#createPath(TEMP_FOLDER)
-
 for i in range(TOTALVIDS):
-	execute("py jumpcutter.py --input_file "+FILENAME[i]+" --output_file Output/"+FILENAMEOUT[i]+".mp4 --sounded_speed 1.6 --silent_speed 999999 --frame_margin 4")
+	execute("py jumpcutter.py --input_file "+FILENAME[i]+" --output_file Output/"+FILENAMEOUT[i]+"_jumpcut.mp4 --sounded_speed 1.6 --silent_speed 999999 --frame_margin 4")
 
 print("All done!")
 input("Press ENTER to exit.")

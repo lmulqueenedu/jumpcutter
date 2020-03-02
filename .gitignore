@@ -97,3 +97,8 @@ gen
 # Temp Stuff
 TEMP*
 JCTEMP*
+
+# Videos
+Videos*
+Output*
+*.mp4

@@ -1,12 +1,9 @@
-import os, subprocess
-from shutil import rmtree
-from time import time
+import sys, subprocess
 
 def execute (cmd):
     subprocess.call(cmd, shell=True)
 
 def createPath(s):
-
     try:
         os.mkdir(s)
     except OSError:
@@ -19,19 +16,19 @@ def deletePath(s): # Dangerous! Watch out!
         print ("Deletion of the directory %s failed" % s)
         print(OSError)
 
-# actual program
-TOTALVIDS = int(input("How many videos are you jumpcutting? "))
+def main():
+    print("Welcome to the lecture jumpcutter!")
+    print("Do you need to merge 2 videos together? Useful for some Math lectures. [Y/N]")
+    usr_input = input()
+    while usr_input not in ['Y', 'N', 'y', 'n']:
+        usr_input = input("Please type either Y or N, then press ENTER to confirm: ")
 
-FILENAME = dict()
-FILENAMEOUT = dict()
+    if usr_input in ['N', 'n']:
+        execute("py single.py")
+    elif usr_inputin ['Y', 'y']:
+        execute("py merge.py")
 
-for i in range(TOTALVIDS):
-    print("File Number: "+str(i+1))
-    FILENAME[i] = input("Enter the filepath of the video: ")
-    FILENAMEOUT[i] = os.path.splitext(os.path.basename(FILENAME[i]))[0]
+    sys.exit()
 
-for i in range(TOTALVIDS):
-	execute("py jumpcutter.py --input_file "+FILENAME[i]+" --output_file Output/"+FILENAMEOUT[i]+"_jumpcut.mp4 --sounded_speed 1.6 --silent_speed 999999 --frame_margin 4")
-
-print("All done!")
-input("Press ENTER to exit.")
+if __name__ == "__main__":
+    main()

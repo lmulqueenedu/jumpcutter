@@ -25,7 +25,7 @@ def main():
 
     if usr_input in ['N', 'n']:
         execute("py single.py")
-    elif usr_inputin ['Y', 'y']:
+    elif usr_input in ['Y', 'y']:
         execute("py merge.py")
 
     sys.exit()
